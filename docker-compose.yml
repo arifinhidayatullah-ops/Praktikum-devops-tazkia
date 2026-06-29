@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # 1. Aplikasi Web Static Pendaftaran Santri
+  # 1. Aplikasi Web Utama (Static App)
   web-app:
     image: nginx:alpine
     container_name: uas-static-app
@@ -9,7 +9,7 @@ services:
     volumes:
       - ./html:/usr/share/nginx/html
 
-  # 2. Nginx Reverse Proxy (Gerbang Utama Port 80 & 443)
+  # 2. Nginx Reverse Proxy (HTTPS & Gateway)
   reverse-proxy:
     image: nginx:alpine
     container_name: nginx-proxy
@@ -24,7 +24,7 @@ services:
     depends_on:
       - web-app
 
-  # 3. Certbot Let's Encrypt (Pengurus Sertifikat SSL HTTPS)
+  # 3. Certbot SSL Auto-Renewal
   certbot:
     image: certbot/certbot
     container_name: certbot-ssl
@@ -33,6 +33,17 @@ services:
       - certbot-var:/var/lib/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
+  # 4. Uptime Kuma Monitoring Dashboard (Akses via Port 3001)
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+
 volumes:
   certbot-etc:
   certbot-var:
+  uptime-kuma-data:
