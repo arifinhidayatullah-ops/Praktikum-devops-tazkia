@@ -23,7 +23,6 @@ services:
       - certbot-var:/var/lib/letsencrypt
     depends_on:
       - web-app
-      - uptime-kuma
 
   # 3. Certbot Let's Encrypt (Pengurus Sertifikat SSL HTTPS)
   certbot:
@@ -34,15 +33,6 @@ services:
       - certbot-var:/var/lib/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-  # 4. [BONUS] Uptime Kuma Monitoring Dashboard
-  uptime-kuma:
-    image: louislam/uptime-kuma:1
-    container_name: uptime-kuma
-    restart: always
-    volumes:
-      - uptime-kuma-data:/app/data
-
 volumes:
   certbot-etc:
   certbot-var:
-  uptime-kuma-data:
