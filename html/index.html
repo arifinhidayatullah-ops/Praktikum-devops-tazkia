@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Penerimaan Santri Baru | PP Fajrussalam</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Favicon -->
+    <link class="js-meta-favicon" rel="icon" type="image/png" href="logo.png">
+    <!-- Tailwind CSS untuk Desain Responsif -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF untuk Auto-Generate PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -59,37 +62,43 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
+    <!-- WRAPPER UNTUK KONTEN UTAMA AGAR FOOTER SELALU DI BAWAH -->
     <div class="flex-grow">
+        <!-- NAVBAR HEADER -->
         <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
-            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="container mx-auto px-3 md:px-4 py-2.5 md:py-3 flex justify-between items-center">
                 
-                <div class="flex items-center space-x-3">
-                    <img src="logo.png" alt="Logo" class="h-12 w-auto" onerror="this.src='https://via.placeholder.com/60x60?text=LOGO'">
-                    <div>
-                        <p class="text-[9px] md:text-xs font-bold text-emerald-700 tracking-wider uppercase leading-none">Tarbiyatul Mu'allimin Al-Islamiyyah (TMI)</p>
-                        <h1 class="text-sm md:text-lg font-extrabold tracking-tight text-gray-900 leading-tight">PONDOK PESANTREN FAJRUSSALAM</h1>
-                        <p class="text-[9px] md:text-xs text-gray-500 font-medium">Sentul City - Bogor - Jawa Barat</p>
+                <!-- SISI KIRI: LOGO & IDENTITAS (Tweak Skala Mobile) -->
+                <div class="flex items-center space-x-2 md:space-x-3 max-w-[75%] md:max-w-none">
+                    <img src="logo.png" alt="Logo" class="h-9 w-auto md:h-12" onerror="this.src='https://via.placeholder.com/60x60?text=LOGO'">
+                    <div class="truncate">
+                        <p class="text-[8px] md:text-xs font-bold text-emerald-700 tracking-wider uppercase leading-none truncate">Tariyah Mu'allimin Al-Islamiyyah (TMI)</p>
+                        <h1 class="text-xs md:text-lg font-extrabold tracking-tight text-gray-900 leading-tight truncate uppercase">PP FAJRUSSALAM</h1>
+                        <p class="text-[8px] md:text-xs text-gray-500 font-medium truncate">Sentul City - Bogor</p>
                     </div>
                 </div>
 
+                <!-- SISI TENGAH: BUBBLE GUM NAVIGATION MENU (DESKTOP) -->
                 <nav class="hidden md:flex items-center space-x-2 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/50">
                     <button id="nav-landing" onclick="navigateTo('landing')" class="bubble-menu-btn active-bubble px-4 py-2 text-xs font-bold tracking-wide transition-all">BERANDA</button>
                     <button id="nav-pendaftaran" onclick="navigateTo('pendaftaran')" class="bubble-menu-btn px-4 py-2 text-xs font-bold tracking-wide text-gray-600 transition-all">PENDAFTARAN</button>
                     <button id="nav-admin-check" onclick="navigateTo('admin-check')" class="bubble-menu-btn px-4 py-2 text-xs font-bold tracking-wide text-gray-600 transition-all">ADMIN PANEL</button>
                 </nav>
 
-                <div class="flex items-center space-x-2">
-                    <div id="adminBadge" class="hidden bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-bold">
-                        Admin Mode
+                <!-- SISI KANAN: TOMBOL MENU MOBILE & BADGE ADMIN -->
+                <div class="flex items-center space-x-1 md:space-x-2">
+                    <div id="adminBadge" class="hidden bg-emerald-100 text-emerald-800 text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold">
+                        Admin
                     </div>
-                    <button onclick="toggleMenu()" class="md:hidden p-2 rounded-xl hover:bg-gray-100 text-fajrus focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button onclick="toggleMenu()" class="md:hidden p-1.5 rounded-lg hover:bg-gray-100 text-fajrus focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 </div>
             </div>
 
+            <!-- DROPDOWN MENU MOBILE -->
             <div id="hamburgerMenu" class="hidden bg-white border-t border-gray-100 shadow-lg absolute w-full left-0 z-40">
                 <div class="px-4 py-3 space-y-1">
                     <button onclick="navigateTo('landing')" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-emerald-50 hover:text-fajrus rounded-lg">BERANDA</button>
@@ -100,223 +109,233 @@
             </div>
         </header>
 
+        <!-- ================= MODUL 1: LANDING BERANDA WITH GRADING BACKGROUND (FIXED GRADIENT & HP SCALE) ================= -->
         <div id="view-landing" class="view-section">
-            <section class="relative min-h-[85vh] flex items-center justify-center px-4 text-center bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(6, 95, 70, 0.88), rgba(4, 30, 24, 0.97)), url('WhatsApp Image 2026-06-30 at 07.45.42.jpg');">
-                <div class="relative z-10 max-w-4xl mx-auto py-12">
-                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-sm">
+            <section class="relative min-h-[75vh] md:min-h-[85vh] flex items-center justify-center px-4 text-center bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(6, 95, 70, 0.92), rgba(2, 48, 32, 0.96)), url('WhatsApp Image 2026-06-30 at 07.45.42.jpg');">
+                <div class="relative z-10 max-w-4xl mx-auto py-8 md:py-12">
+                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] md:text-xs font-bold px-3 py-1 md:py-1.5 rounded-full uppercase tracking-widest backdrop-blur-sm">
                         Penerimaan Santri Baru (PSB) 2026
                     </span>
-                    <h2 class="text-amber-400 text-sm md:text-xl font-bold mt-6 tracking-widest uppercase">
+                    <h2 class="text-amber-400 text-xs md:text-xl font-bold mt-5 md:mt-6 tracking-wide md:tracking-widest uppercase px-2">
                         ASSALAMUALAIKUM AHLAN WASAHLAN CALON SANTRI BARU
                     </h2>
-                    <p class="text-xs md:text-sm text-gray-300 font-medium tracking-wide mt-1 uppercase">
+                    <p class="text-[10px] md:text-sm text-emerald-300/90 font-medium tracking-wide mt-1 uppercase">
                         (Satuan Pendidikan Muadalah)
                     </p>
-                    <h1 class="text-3xl md:text-6xl font-black text-white mt-3 mb-6 tracking-tight leading-tight uppercase">
-                        Pondok Pesantren <br><span class="text-amber-400">Fajrussalam Bogor</span>
+                    <!-- Font size disesuaikan agar di HP tidak menumpuk raksasa (text-2xl di mobile, text-6xl di desktop) -->
+                    <h1 class="text-2xl md:text-6xl font-black text-white mt-3 mb-4 md:mb-6 tracking-tight leading-tight uppercase px-1">
+                        Pondok Pesantren <br class="hidden md:block"><span class="text-amber-400">Fajrussalam Bogor</span>
                     </h1>
-                    <p class="text-sm md:text-lg text-emerald-100 max-w-2xl mx-auto font-light mb-10 leading-relaxed">
+                    <p class="text-xs md:text-lg text-emerald-100 max-w-2xl mx-auto font-light mb-8 md:mb-10 leading-relaxed px-2">
                         Mewujudkan lembaga pendidikan Islam terdepan guna melahirkan kader ulama yang ikhlas, cerdas, berkepribadian mulia, mandiri, dan berwawasan luas.
                     </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <button onclick="navigateTo('pendaftaran')" class="w-full sm:w-80 bg-amber-500 hover:bg-amber-600 text-gray-900 font-extrabold px-8 py-4 rounded-xl shadow-xl transition-all duration-300 hover:scale-105 transform text-sm md:text-base">
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 px-4 w-full">
+                        <button onclick="navigateTo('pendaftaran')" class="w-full sm:w-80 bg-amber-500 hover:bg-amber-600 text-gray-900 font-extrabold px-6 py-3.5 md:py-4 rounded-xl shadow-xl transition-all duration-300 hover:scale-105 transform text-xs md:text-base tracking-wide uppercase">
                             Isi Formulir Pendaftaran
                         </button>
                     </div>
                 </div>
-                <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent"></div>
+                <!-- Efek Fade Transparan Dekoratif Di Bawah Hero -->
+                <div class="absolute bottom-0 left-0 right-0 h-16 md:h-24 bg-gradient-to-t from-gray-50 to-transparent"></div>
             </section>
         </div>
 
-        <div id="view-pendaftaran" class="view-section hidden container mx-auto px-4 py-12 max-w-4xl">
-            <div id="box-form-isi" class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100">
-                    <h3 class="text-lg md:text-xl font-bold text-fajrus">Formulir Pendaftaran Calon Santri</h3>
-                    <p class="text-xs text-gray-500 mt-0.5">Lengkapi data santri, orang tua, riwayat sekolah, dan upload berkas wajib.</p>
+        <!-- ================= MODUL 2: FORMULIR & REVIEW PENDAFTARAN ================= -->
+        <div id="view-pendaftaran" class="view-section hidden container mx-auto px-3 md:px-4 py-6 md:py-12 max-w-4xl">
+            <!-- STEP 1: ISI DATA FORMULIR -->
+            <div id="box-form-isi" class="bg-white rounded-xl md:rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="bg-emerald-50 px-4 md:px-6 py-3.5 md:py-4 border-b border-emerald-100">
+                    <h3 class="text-base md:text-xl font-bold text-fajrus">Formulir Pendaftaran Calon Santri</h3>
+                    <p class="text-[11px] md:text-xs text-gray-500 mt-0.5">Lengkapi data santri, orang tua, riwayat sekolah, dan upload berkas wajib.</p>
                 </div>
                 
-                <form id="mainForm" class="p-6 md:p-8 space-y-8" onsubmit="processToReview(event)">
+                <form id="mainForm" class="p-4 md:p-8 space-y-6 md:space-y-8" onsubmit="processToReview(event)">
+                    <!-- I. Data Santri -->
                     <div>
-                        <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>I. Informasi Calon Santri</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <h4 class="text-xs md:text-sm font-bold text-emerald-800 uppercase tracking-wider mb-3 md:border-0 md:mb-4 flex items-center"><span class="w-1.5 h-3.5 bg-fajrus inline-block mr-2 rounded-sm"></span>I. Informasi Calon Santri</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
-                                <input type="text" id="stuName" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+                                <input type="text" id="stuName" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
-                                <select id="stuGender" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                                <select id="stuGender" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                                     <option value="">-- Pilih Jenis Kelamin --</option>
                                     <option value="Laki-laki">Laki-laki</option>
                                     <option value="Perempuan">Perempuan</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Tempat Lahir <span class="text-red-500">*</span></label>
-                                <input type="text" id="stuPOB" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Tempat Lahir <span class="text-red-500">*</span></label>
+                                <input type="text" id="stuPOB" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Tanggal Lahir <span class="text-red-500">*</span></label>
-                                <input type="date" id="stuDOB" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Tanggal Lahir <span class="text-red-500">*</span></label>
+                                <input type="date" id="stuDOB" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Agama</label>
-                                <input type="text" id="stuReligion" value="Islam" readonly class="w-full border bg-gray-50 rounded-lg p-2.5 text-sm font-medium text-gray-500">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Agama</label>
+                                <input type="text" id="stuReligion" value="Islam" readonly class="w-full border bg-gray-50 rounded-lg p-2 md:p-2.5 text-xs md:text-sm font-medium text-gray-500">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Kewarganegaraan</label>
-                                <input type="text" id="stuNation" value="Indonesia (WNI)" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Kewarganegaraan</label>
+                                <input type="text" id="stuNation" value="Indonesia (WNI)" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">No. HP / WhatsApp Aktif <span class="text-red-500">*</span></label>
-                                <input type="tel" id="stuPhone" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">No. HP / WhatsApp Aktif <span class="text-red-500">*</span></label>
+                                <input type="tel" id="stuPhone" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Alamat Lengkap Rumah <span class="text-red-500">*</span></label>
-                                <textarea id="stuAddress" rows="2" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500" placeholder="Jalan, RT/RW, Desa, Kecamatan, Kab/Kota, Provinsi"></textarea>
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Alamat Lengkap Rumah <span class="text-red-500">*</span></label>
+                                <textarea id="stuAddress" rows="2" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500" placeholder="Jalan, RT/RW, Desa, Kecamatan, Kab/Kota, Provinsi"></textarea>
                             </div>
                         </div>
                     </div>
 
+                    <!-- II. Informasi Orang Tua -->
                     <div>
-                        <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>II. Informasi Orang Tua Kandung</h4>
-                        <div class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl bg-gray-50/50">
-                                <h5 class="md:col-span-2 text-xs font-bold text-gray-700 border-b pb-1">DATA AYAH</h5>
+                        <h4 class="text-xs md:text-sm font-bold text-emerald-800 uppercase tracking-wider mb-3 md:mb-4 flex items-center"><span class="w-1.5 h-3.5 bg-fajrus inline-block mr-2 rounded-sm"></span>II. Informasi Orang Tua Kandung</h4>
+                        <div class="space-y-5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 p-3 md:p-4 border rounded-xl bg-gray-50/50">
+                                <h5 class="md:col-span-2 text-[11px] md:text-xs font-bold text-gray-700 border-b pb-1">DATA AYAH</h5>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Ayah <span class="text-red-500">*</span></label>
-                                    <input type="text" id="faName" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Nama Ayah <span class="text-red-500">*</span></label>
+                                    <input type="text" id="faName" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Tempat, Tgl Lahir Ayah <span class="text-red-500">*</span></label>
-                                    <input type="text" id="faBirth" placeholder="Bogor, 15-02-1978" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Tempat, Tgl Lahir Ayah <span class="text-red-500">*</span></label>
+                                    <input type="text" id="faBirth" placeholder="Bogor, 15-02-1978" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Pekerjaan Ayah <span class="text-red-500">*</span></label>
-                                    <input type="text" id="faJob" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Pekerjaan Ayah <span class="text-red-500">*</span></label>
+                                    <input type="text" id="faJob" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">No. HP Ayah <span class="text-red-500">*</span></label>
-                                    <input type="tel" id="faPhone" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">No. HP Ayah <span class="text-red-500">*</span></label>
+                                    <input type="tel" id="faPhone" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div class="md:col-span-2">
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Alamat Ayah <span class="text-red-500">*</span></label>
-                                    <input type="text" id="faAddress" placeholder="Alamat lengkap ayah" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Alamat Ayah <span class="text-red-500">*</span></label>
+                                    <input type="text" id="faAddress" placeholder="Alamat lengkap ayah" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl bg-gray-50/50">
-                                <h5 class="md:col-span-2 text-xs font-bold text-gray-700 border-b pb-1">DATA IBU</h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 p-3 md:p-4 border rounded-xl bg-gray-50/50">
+                                <h5 class="md:col-span-2 text-[11px] md:text-xs font-bold text-gray-700 border-b pb-1">DATA IBU</h5>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Ibu <span class="text-red-500">*</span></label>
-                                    <input type="text" id="moName" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Nama Ibu <span class="text-red-500">*</span></label>
+                                    <input type="text" id="moName" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Tempat, Tgl Lahir Ibu <span class="text-red-500">*</span></label>
-                                    <input type="text" id="moBirth" placeholder="Jakarta, 10-08-1983" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Tempat, Tgl Lahir Ibu <span class="text-red-500">*</span></label>
+                                    <input type="text" id="moBirth" placeholder="Jakarta, 10-08-1983" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Pekerjaan Ibu <span class="text-red-500">*</span></label>
-                                    <input type="text" id="moJob" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Pekerjaan Ibu <span class="text-red-500">*</span></label>
+                                    <input type="text" id="moJob" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">No. HP Ibu <span class="text-red-500">*</span></label>
-                                    <input type="tel" id="moPhone" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">No. HP Ibu <span class="text-red-500">*</span></label>
+                                    <input type="tel" id="moPhone" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                                 <div class="md:col-span-2">
-                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Alamat Ibu <span class="text-red-500">*</span></label>
-                                    <input type="text" id="moAddress" placeholder="Alamat lengkap ibu" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-sm">
+                                    <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Alamat Ibu <span class="text-red-500">*</span></label>
+                                    <input type="text" id="moAddress" placeholder="Alamat lengkap ibu" required class="w-full border border-gray-300 bg-white rounded-lg p-2 text-xs md:text-sm">
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- III. Informasi Pendidikan -->
                     <div>
-                        <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>III. Informasi Pendidikan Asal</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <h4 class="text-xs md:text-sm font-bold text-emerald-800 uppercase tracking-wider mb-3 md:mb-4 flex items-center"><span class="w-1.5 h-3.5 bg-fajrus inline-block mr-2 rounded-sm"></span>III. Informasi Pendidikan Asal</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Sekolah Asal <span class="text-red-500">*</span></label>
-                                <input type="text" id="eduOldSchool" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Nama Sekolah Asal <span class="text-red-500">*</span></label>
+                                <input type="text" id="eduOldSchool" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Jenjang Pendidikan Terakhir <span class="text-red-500">*</span></label>
-                                <select id="eduLevel" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Jenjang Pendidikan Terakhir <span class="text-red-500">*</span></label>
+                                <select id="eduLevel" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm">
                                     <option value="">-- Pilih Jenjang --</option>
                                     <option value="SD / Sederajat">SD / Sederajat</option>
                                     <option value="SMP / Sederajat">SMP / Sederajat</option>
                                 </select>
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Alamat Sekolah Asal <span class="text-red-500">*</span></label>
-                                <input type="text" id="eduSchoolAddress" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm">
+                                <label class="block text-[11px] md:text-xs font-semibold text-gray-600 mb-1">Alamat Sekolah Asal <span class="text-red-500">*</span></label>
+                                <input type="text" id="eduSchoolAddress" required class="w-full border border-gray-300 rounded-lg p-2 md:p-2.5 text-xs md:text-sm">
                             </div>
                         </div>
                     </div>
 
+                    <!-- IV. Dokumen Lampiran -->
                     <div>
-                        <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>IV. Dokumen Lampiran (Maks 2MB)</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div class="border p-4 rounded-xl bg-white">
-                                <label class="block text-xs font-bold text-gray-700 mb-1">Pas Foto 3x3 <span class="text-red-500">*</span></label>
-                                <input type="file" id="filePhoto" required onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
+                        <h4 class="text-xs md:text-sm font-bold text-emerald-800 uppercase tracking-wider mb-3 md:mb-4 flex items-center"><span class="w-1.5 h-3.5 bg-fajrus inline-block mr-2 rounded-sm"></span>IV. Dokumen Lampiran (Maks 2MB)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="border p-3 rounded-xl bg-white">
+                                <label class="block text-[11px] md:text-xs font-bold text-gray-700 mb-1">Pas Foto 3x3 <span class="text-red-500">*</span></label>
+                                <input type="file" id="filePhoto" required onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
                             </div>
-                            <div class="border p-4 rounded-xl bg-white">
-                                <label class="block text-xs font-bold text-gray-700 mb-1">Kartu Keluarga (KK) <span class="text-red-500">*</span></label>
-                                <input type="file" id="fileKK" required onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
+                            <div class="border p-3 rounded-xl bg-white">
+                                <label class="block text-[11px] md:text-xs font-bold text-gray-700 mb-1">Kartu Keluarga (KK) <span class="text-red-500">*</span></label>
+                                <input type="file" id="fileKK" required onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
                             </div>
-                            <div class="border p-4 rounded-xl bg-white">
-                                <label class="block text-xs font-bold text-gray-700 mb-1">Akte Kelahiran <span class="text-red-500">*</span></label>
-                                <input type="file" id="fileAkte" required onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
+                            <div class="border p-3 rounded-xl bg-white">
+                                <label class="block text-[11px] md:text-xs font-bold text-gray-700 mb-1">Akte Kelahiran <span class="text-red-500">*</span></label>
+                                <input type="file" id="fileAkte" required onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
                             </div>
-                            <div class="border p-4 rounded-xl bg-white">
-                                <label class="block text-xs font-bold text-gray-700 mb-1">Ijazah / Rapor <span class="text-gray-400">(Opsional)</span></label>
-                                <input type="file" id="fileIjazah" onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
+                            <div class="border p-3 rounded-xl bg-white">
+                                <label class="block text-[11px] md:text-xs font-bold text-gray-700 mb-1">Ijazah / Rapor <span class="text-gray-400">(Opsional)</span></label>
+                                <input type="file" id="fileIjazah" onchange="validateFile(this)" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 font-semibold">
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-fajrus text-white py-4 rounded-xl font-bold hover-fajrus transition shadow-md">
+                    <button type="submit" class="w-full bg-fajrus text-white py-3 md:py-4 rounded-xl font-bold hover-fajrus transition shadow-md text-xs md:text-sm">
                         Review Isian Formulir
                     </button>
                 </form>
             </div>
 
-            <div id="box-form-review" class="bg-white rounded-2xl shadow-xl border-2 border-amber-500 overflow-hidden hidden">
-                <div class="bg-amber-50 px-6 py-4 border-b border-amber-200">
-                    <h3 class="text-lg font-bold text-amber-800 flex items-center">
+            <!-- STEP 2: HALAMAN REVIEW -->
+            <div id="box-form-review" class="bg-white rounded-xl md:rounded-2xl shadow-xl border-2 border-amber-500 overflow-hidden hidden">
+                <div class="bg-amber-50 px-4 md:px-6 py-3.5 md:py-4 border-b border-amber-200">
+                    <h3 class="text-sm md:text-lg font-bold text-amber-800 flex items-center">
                         ⚠️ Mode Review & Konfirmasi Data
                     </h3>
-                    <p class="text-xs text-amber-700 mt-0.5">Mohon periksa kembali seluruh data Anda sebelum menekan tombol simpan permanen.</p>
+                    <p class="text-[11px] md:text-xs text-amber-700 mt-0.5">Mohon periksa kembali seluruh data Anda sebelum menekan tombol simpan permanen.</p>
                 </div>
                 
-                <div class="p-6 md:p-8 space-y-6 text-sm">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b pb-4">
-                        <div class="md:col-span-2 font-bold text-fajrus uppercase border-b pb-1">I. Data Santri</div>
-                        <div><span class="text-gray-500 block text-xs">Nama Lengkap:</span> <strong id="revName"></strong></div>
-                        <div><span class="text-gray-500 block text-xs">Jenis Kelamin:</span> <strong id="revGender"></strong></div>
-                        <div><span class="text-gray-500 block text-xs">Tempat, Tanggal Lahir:</span> <strong id="revBirth"></strong></div>
-                        <div><span class="text-gray-500 block text-xs">No. Handphone:</span> <strong id="revPhone"></strong></div>
-                        <div class="md:col-span-2"><span class="text-gray-500 block text-xs">Alamat Lengkap:</span> <strong id="revAddress"></strong></div>
+                <div class="p-4 md:p-8 space-y-5 md:space-y-6 text-xs md:text-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 border-b pb-4">
+                        <div class="md:col-span-2 font-bold text-fajrus uppercase border-b pb-1 text-[11px] md:text-xs">I. Data Santri</div>
+                        <div><span class="text-gray-500 block text-[11px]">Nama Lengkap:</span> <strong id="revName" class="text-gray-900"></strong></div>
+                        <div><span class="text-gray-500 block text-[11px]">Jenis Kelamin:</span> <strong id="revGender" class="text-gray-900"></strong></div>
+                        <div><span class="text-gray-500 block text-[11px]">Tempat, Tanggal Lahir:</span> <strong id="revBirth" class="text-gray-900"></strong></div>
+                        <div><span class="text-gray-500 block text-[11px]">No. Handphone:</span> <strong id="revPhone" class="text-gray-900"></strong></div>
+                        <div class="md:col-span-2"><span class="text-gray-500 block text-[11px]">Alamat Lengkap:</span> <strong id="revAddress" class="text-gray-900"></strong></div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b pb-4">
-                        <div class="md:col-span-2 font-bold text-fajrus uppercase border-b pb-1">II. Data Orang Tua</div>
-                        <div><span class="text-gray-500 block text-xs">Nama Ayah (TTL/Job):</span> <strong id="revFather"></strong></div>
-                        <div><span class="text-gray-500 block text-xs">No. HP & Alamat Ayah:</span> <strong id="revFatherDetail"></strong></div>
-                        <div><span class="text-gray-500 block text-xs">Nama Ibu (TTL/Job):</span> <strong id="revMother"></strong></div>
-                        <div><span class="text-gray-500 block text-xs">No. HP & Alamat Ibu:</span> <strong id="revMotherDetail"></strong></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 border-b pb-4">
+                        <div class="md:col-span-2 font-bold text-fajrus uppercase border-b pb-1 text-[11px] md:text-xs">II. Data Orang Tua</div>
+                        <div><span class="text-gray-500 block text-[11px]">Nama Ayah (TTL/Job):</span> <strong id="revFather" class="text-gray-900"></strong></div>
+                        <div><span class="text-gray-500 block text-[11px]">No. HP & Alamat Ayah:</span> <strong id="revFatherDetail" class="text-gray-900"></strong></div>
+                        <div><span class="text-gray-500 block text-[11px]">Nama Ibu (TTL/Job):</span> <strong id="revMother" class="text-gray-900"></strong></div>
+                        <div><span class="text-gray-500 block text-[11px]">No. HP & Alamat Ibu:</span> <strong id="revMotherDetail" class="text-gray-900"></strong></div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b pb-4">
-                        <div class="md:col-span-2 font-bold text-fajrus uppercase border-b pb-1">III. Riwayat Sekolah</div>
-                        <div><span class="text-gray-500 block text-xs">Asal Sekolah (Jenjang):</span> <strong id="revSchool"></strong></div>
-                        <div><span class="text-gray-500 block text-xs">Alamat Sekolah:</span> <strong id="revSchoolAddr"></strong></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 border-b pb-4">
+                        <div class="md:col-span-2 font-bold text-fajrus uppercase border-b pb-1 text-[11px] md:text-xs">III. Riwayat Sekolah</div>
+                        <div><span class="text-gray-500 block text-[11px]">Asal Sekolah (Jenjang):</span> <strong id="revSchool" class="text-gray-900"></strong></div>
+                        <div><span class="text-gray-500 block text-[11px]">Alamat Sekolah:</span> <strong id="revSchoolAddr" class="text-gray-900"></strong></div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
-                        <button onclick="backToEditForm()" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition">
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button onclick="backToEditForm()" class="flex-1 bg-gray-100 text-gray-700 py-2.5 md:py-3 rounded-xl font-bold hover:bg-gray-200 transition text-xs md:text-sm">
                             ← Kembali Edit Data
                         </button>
-                        <button onclick="submitFinalRegistration()" class="flex-1 bg-fajrus text-white py-3 rounded-xl font-bold hover-fajrus transition shadow-lg">
+                        <button onclick="submitFinalRegistration()" class="flex-1 bg-fajrus text-white py-2.5 md:py-3 rounded-xl font-bold hover-fajrus transition shadow-lg text-xs md:text-sm">
                             Konfirmasi & Kirim Data ✓
                         </button>
                     </div>
@@ -324,90 +343,93 @@
             </div>
         </div>
 
-        <div id="view-success" class="view-section hidden container mx-auto px-4 py-16 max-w-xl">
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 text-center">
-                <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <!-- ================= MODUL 3: HALAMAN HASIL AKHIR ================= -->
+        <div id="view-success" class="view-section hidden container mx-auto px-4 py-12 md:py-16 max-w-xl">
+            <div class="bg-white rounded-xl md:rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8 text-center">
+                <div class="w-12 h-12 md:w-16 md:h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h2 class="text-2xl font-black text-gray-900 mb-1">Pendaftaran Terkirim!</h2>
-                <p class="text-gray-500 text-xs mb-6">Hasil pengisian data Anda telah direkam di sistem pendaftaran.</p>
+                <h2 class="text-xl md:text-2xl font-black text-gray-900 mb-1">Pendaftaran Terkirim!</h2>
+                <p class="text-gray-500 text-[11px] md:text-xs mb-6">Hasil pengisian data Anda telah direkam di sistem pendaftaran.</p>
                 
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6">
-                    <span class="block text-[10px] uppercase font-bold text-gray-400 tracking-wider">Nomor Registrasi Santri</span>
-                    <span id="lblSuccessRegNum" class="text-2xl font-mono font-black text-fajrus tracking-wider">FJ-2026-XXXX</span>
+                    <span class="block text-[9px] md:text-[10px] uppercase font-bold text-gray-400 tracking-wider">Nomor Registrasi Santri</span>
+                    <span id="lblSuccessRegNum" class="text-xl md:text-2xl font-mono font-black text-fajrus tracking-wider">FJ-2026-XXXX</span>
                 </div>
 
                 <div class="space-y-3">
-                    <button onclick="downloadRegistrationPDF()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow hover:bg-emerald-700 transition flex items-center justify-center space-x-2 text-sm">
+                    <button onclick="downloadRegistrationPDF()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow hover:bg-emerald-700 transition flex items-center justify-center space-x-2 text-xs md:text-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         <span>Download Hasil Akhir (PDF)</span>
                     </button>
-                    <button onclick="resetToHome()" class="w-full bg-gray-100 text-gray-600 font-semibold py-2.5 rounded-xl text-xs hover:bg-gray-200 transition">
+                    <button onclick="resetToHome()" class="w-full bg-gray-100 text-gray-600 font-semibold py-2.5 rounded-xl text-[11px] md:text-xs hover:bg-gray-200 transition">
                         Kembali ke Beranda Utama
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="view-admin-check" class="view-section hidden container mx-auto px-4 py-20 max-w-sm">
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
-                <div class="text-center mb-6">
-                    <h3 class="text-lg font-bold text-gray-900">Sign In Administrator</h3>
-                    <p class="text-xs text-gray-500">Gunakan akun kredensial pusat Lajnah PSB.</p>
+        <!-- ================= MODUL 4: LOGIN GATEWAY ADMIN ================= -->
+        <div id="view-admin-check" class="view-section hidden container mx-auto px-4 py-16 md:py-20 max-w-sm">
+            <div class="bg-white rounded-xl md:rounded-2xl shadow-xl border border-gray-100 p-5 md:p-6">
+                <div class="text-center mb-5">
+                    <h3 class="text-base md:text-lg font-bold text-gray-900">Sign In Administrator</h3>
+                    <p class="text-[11px] md:text-xs text-gray-500">Gunakan akun kredensial pusat Lajnah PSB.</p>
                 </div>
                 <form onsubmit="handleAdminAuth(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-gray-600 mb-1">Username Admin</label>
-                        <input type="text" id="inputUser" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <label class="block text-[11px] md:text-xs font-bold text-gray-600 mb-1">Username Admin</label>
+                        <input type="text" id="inputUser" required class="w-full border rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-600 mb-1">Password</label>
-                        <input type="password" id="inputPass" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <label class="block text-[11px] md:text-xs font-bold text-gray-600 mb-1">Password</label>
+                        <input type="password" id="inputPass" required class="w-full border rounded-lg p-2 md:p-2.5 text-xs md:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                     </div>
-                    <div id="loginError" class="text-xs text-red-600 font-medium hidden">⚠️ Akun login salah!</div>
-                    <button type="submit" class="w-full bg-gray-900 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-gray-800 transition">
+                    <div id="loginError" class="text-[11px] md:text-xs text-red-600 font-medium hidden">⚠️ Akun login salah!</div>
+                    <button type="submit" class="w-full bg-gray-900 text-white font-bold py-2.5 rounded-lg text-xs md:text-sm hover:bg-gray-800 transition">
                         Verifikasi Masuk
                     </button>
                 </form>
             </div>
         </div>
 
-        <div id="view-admin-dashboard" class="view-section hidden container mx-auto px-4 py-10 max-w-6xl">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4">
-                <div class="flex items-center space-x-4">
-                    <img src="logo.png" alt="Logo" class="h-14 w-auto object-contain" onerror="this.src='https://via.placeholder.com/60x60?text=LOGO'">
+        <!-- ================= MODUL 5: DASHBOARD CONTROL ADMIN ================= -->
+        <div id="view-admin-dashboard" class="view-section hidden container mx-auto px-3 md:px-4 py-6 md:py-10 max-w-6xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 border-b pb-4 gap-3">
+                <div class="flex items-center space-x-3">
+                    <img src="logo.png" alt="Logo" class="h-10 w-auto md:h-14 object-contain" onerror="this.src='https://via.placeholder.com/60x60?text=LOGO'">
                     <div>
-                        <h2 class="text-2xl font-black text-gray-900 tracking-tight">Dashboard Control PSB</h2>
-                        <p class="text-xs text-gray-500">Basis data pendaftaran terpusat Pondok Pesantren Fajrussalam.</p>
+                        <h2 class="text-lg md:text-2xl font-black text-gray-900 tracking-tight">Dashboard Control PSB</h2>
+                        <p class="text-[11px] md:text-xs text-gray-500">Basis data pendaftaran terpusat Pondok Pesantren Fajrussalam.</p>
                     </div>
                 </div>
-                <button onclick="logoutAdmin()" class="mt-3 sm:mt-0 bg-red-600 text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                <button onclick="logoutAdmin()" class="w-full sm:w-auto bg-red-600 text-white font-bold text-[11px] md:text-xs px-3 py-2 rounded-lg hover:bg-red-700 transition text-center">
                     Keluar Sistem Admin
                 </button>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-xl md:rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
-                    <span class="text-xs font-bold text-gray-600 uppercase tracking-wider">Rekapitulasi Santri Masuk</span>
-                    <span id="txtTotalRecords" class="bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full">Total: 0</span>
+                    <span class="text-[11px] md:text-xs font-bold text-gray-600 uppercase tracking-wider">Rekapitulasi Santri Masuk</span>
+                    <span id="txtTotalRecords" class="bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-0.5 md:py-1 rounded-full">Total: 0</span>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
                         <thead>
-                            <tr class="bg-gray-100 text-gray-600 text-[11px] uppercase font-bold border-b border-gray-200">
-                                <th class="p-4">No. Registrasi</th>
-                                <th class="p-4">Nama Lengkap</th>
-                                <th class="p-4">L/P</th>
-                                <th class="p-4">Sekolah Asal</th>
-                                <th class="p-4">Kontak Wali</th>
-                                <th class="p-4 text-center">Aksi Dokumen</th>
+                            <tr class="bg-gray-100 text-gray-600 text-[10px] md:text-[11px] uppercase font-bold border-b border-gray-200">
+                                <th class="p-3 md:p-4">No. Registrasi</th>
+                                <th class="p-3 md:p-4">Nama Lengkap</th>
+                                <th class="p-3 md:p-4">L/P</th>
+                                <th class="p-3 md:p-4">Sekolah Asal</th>
+                                <th class="p-3 md:p-4">Kontak Wali</th>
+                                <th class="p-3 md:p-4 text-center">Aksi Dokumen</th>
                             </tr>
                         </thead>
-                        <tbody id="tableRecordsBody" class="text-xs divide-y divide-gray-100 text-gray-700"></tbody>
+                        <tbody id="tableRecordsBody" class="text-[11px] md:text-xs divide-y divide-gray-100 text-gray-700"></tbody>
                     </table>
-                    <div id="emptyState" class="p-12 text-center text-gray-400 font-medium hidden">
+                    <div id="emptyState" class="p-10 text-center text-gray-400 font-medium hidden">
                         Belum ada riwayat pendaftaran online santri masuk.
                     </div>
                 </div>
@@ -415,28 +437,30 @@
         </div>
     </div>
 
-    <footer id="mainAppFooter" class="bg-fajrus-dark text-white pt-12 pb-6 px-4 mt-auto border-t-4 border-amber-500 hidden">
+    <!-- ELEMEN FOOTER UTAMA -->
+    <footer id="mainAppFooter" class="bg-fajrus-dark text-white pt-10 pb-6 px-4 mt-auto border-t-4 border-amber-500 hidden">
         <div class="max-w-4xl mx-auto text-center">
-            <div class="flex items-center justify-center space-x-4 md:space-x-8 mb-4">
-                <div class="h-[1.5px] w-12 md:w-20 bg-amber-500 opacity-60"></div>
-                <h2 class="text-base md:text-xl font-bold tracking-[0.2em] text-emerald-300 uppercase leading-snug">
+            <div class="flex items-center justify-center space-x-4 md:space-x-8 mb-3">
+                <div class="h-[1.5px] w-8 md:w-20 bg-amber-500 opacity-60"></div>
+                <h2 class="text-sm md:text-xl font-bold tracking-[0.2em] text-emerald-300 uppercase leading-snug">
                     Pondok Pesantren<br class="block sm:hidden"> Fajrussalam
                 </h2>
-                <div class="h-[1.5px] w-12 md:w-20 bg-amber-500 opacity-60"></div>
+                <div class="h-[1.5px] w-8 md:w-20 bg-amber-500 opacity-60"></div>
             </div>
-            <p class="text-xs md:text-sm font-medium tracking-wide text-emerald-100 mb-1">
+            <p class="text-[11px] md:text-sm font-medium tracking-wide text-emerald-100 mb-1">
                 Tarbiyatul Mu'allimin Al-Islamiyyah (TMI)
             </p>
-            <p class="text-[11px] md:text-xs text-emerald-400 font-normal tracking-wide">
+            <p class="text-[10px] md:text-xs text-emerald-400 font-normal tracking-wide">
                 Sentul City — Bogor — Jawa Barat
             </p>
-            <div class="w-full max-w-2xl h-[0.5px] bg-emerald-800 my-6 mx-auto opacity-50"></div>
-            <p class="text-[10px] md:text-xs text-emerald-500 tracking-wider">
+            <div class="w-full max-w-2xl h-[0.5px] bg-emerald-800 my-5 mx-auto opacity-50"></div>
+            <p class="text-[9px] md:text-xs text-emerald-500 tracking-wider">
                 © 2026 Pondok Pesantren Fajrussalam. Hak cipta dilindungi.
             </p>
         </div>
     </footer>
 
+    <!-- ================= PROGRAM LOGIC ENGINE JAVASCRIPT ================= -->
     <script>
         let activeRegistration = null; 
         let globalDatabase = JSON.parse(localStorage.getItem('fajrus_db_v2') || '[]');
@@ -718,15 +742,15 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
                 tr.innerHTML = `
-                    <td class="p-4 font-mono font-bold text-emerald-800">${data.regNumber}</td>
-                    <td class="p-4 font-semibold text-gray-900">${data.name}</td>
-                    <td class="p-4">${data.gender === 'Laki-laki' ? 'L' : 'P'}</td>
-                    <td class="p-4 max-w-[140px] truncate">${data.school}</td>
-                    <td class="p-4">${data.phone}</td>
-                    <td class="p-4 text-center space-x-1 flex justify-center items-center">
-                        <button onclick="adminReviewData(${index})" class="bg-amber-50 text-amber-700 font-bold px-3 py-1 rounded border border-amber-200 hover:bg-amber-500 hover:text-white transition">Review</button>
-                        <button onclick="adminDownloadPDF(${index})" class="bg-emerald-50 text-emerald-700 font-bold px-3 py-1 rounded border border-emerald-200 hover:bg-emerald-600 hover:text-white transition">PDF</button>
-                        <button onclick="adminDeleteRecord(${index})" class="bg-red-50 text-red-600 font-bold px-3 py-1 rounded border border-red-200 hover:bg-red-600 hover:text-white transition">Hapus</button>
+                    <td class="p-3 md:p-4 font-mono font-bold text-emerald-800">${data.regNumber}</td>
+                    <td class="p-3 md:p-4 font-semibold text-gray-900">${data.name}</td>
+                    <td class="p-3 md:p-4">${data.gender === 'Laki-laki' ? 'L' : 'P'}</td>
+                    <td class="p-3 md:p-4 max-w-[140px] truncate">${data.school}</td>
+                    <td class="p-3 md:p-4">${data.phone}</td>
+                    <td class="p-3 md:p-4 text-center space-x-1 flex justify-center items-center">
+                        <button onclick="adminReviewData(${index})" class="bg-amber-50 text-amber-700 font-bold px-2 py-1 rounded border border-amber-200 hover:bg-amber-500 hover:text-white transition text-[10px] md:text-xs">Review</button>
+                        <button onclick="adminDownloadPDF(${index})" class="bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded border border-emerald-200 hover:bg-emerald-600 hover:text-white transition text-[10px] md:text-xs">PDF</button>
+                        <button onclick="adminDeleteRecord(${index})" class="bg-red-50 text-red-600 font-bold px-2 py-1 rounded border border-red-200 hover:bg-red-600 hover:text-white transition text-[10px] md:text-xs">Hapus</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -770,11 +794,11 @@
                         <div class="bg-white border rounded-lg overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-md transition">
                             <div class="p-2 border-b bg-gray-50 flex justify-between items-center">
                                 <span class="text-xs font-bold text-gray-700 truncate">${title}</span>
-                                <span class="text-[9px] bg-blue-100 text-blue-700 font-bold px-1.5 py-0.5 rounded">IMAGE (CLICK TO ZOOM)</span>
+                                <span class="text-[9px] bg-blue-100 text-blue-700 font-bold px-1.5 py-0.5 rounded">IMAGE</span>
                             </div>
-                            <div class="bg-gray-100 h-40 flex items-center justify-center overflow-hidden relative cursor-zoom-in" onclick="openImageModal('${base64Data}', '${title}')" title="Klik untuk memperbesar gambar">
+                            <div class="bg-gray-100 h-40 flex items-center justify-center overflow-hidden relative cursor-zoom-in" onclick="openImageModal('${base64Data}', '${title}')">
                                 <img src="${base64Data}" class="w-full h-full object-contain object-center hover:scale-105 transition duration-300" alt="${title}">
-                                <a href="${base64Data}" download="${filename}.png" onclick="event.stopPropagation();" class="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white p-2 rounded shadow-lg backdrop-blur-sm transition flex items-center justify-center" title="Unduh Gambar">
+                                <a href="${base64Data}" download="${filename}.png" onclick="event.stopPropagation();" class="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white p-2 rounded shadow-lg backdrop-blur-sm transition flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                                 </a>
                             </div>
@@ -789,65 +813,65 @@
                 '<html>' +
                 '<head>' +
                 '    <title>Review Biodata - ' + data.name + '</title>' +
+                '    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
                 '    <script src="https://cdn.tailwindcss.com"><\/script>' +
                 '</head>' +
-                '<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col pb-12 relative">' +
+                '<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col pb-12 relative text-xs md:text-sm">' +
                 '    ' +
-                '    <div class="bg-white border-b sticky top-0 z-40 shadow-sm px-4 py-3 mb-6">' +
-                '        <div class="max-w-3xl mx-auto flex justify-between items-center">' +
-                '            <button onclick="window.close()" class="bg-gray-100 text-gray-700 font-bold text-xs px-4 py-2 rounded-lg border hover:bg-gray-200 transition flex items-center space-x-1.5">' +
-                '                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>' +
-                '                <span>Kembali ke Dashboard</span>' +
+                '    <div class="bg-white border-b sticky top-0 z-40 shadow-sm px-4 py-2.5 mb-4">' +
+                '        <div class="max-w-3xl mx-auto flex justify-between items-center gap-2">' +
+                '            <button onclick="window.close()" class="bg-gray-100 text-gray-700 font-bold text-[11px] md:text-xs px-3 py-2 rounded-lg border hover:bg-gray-200 transition flex items-center space-x-1">' +
+                '                <span>← Keluar</span>' +
                 '            </button>' +
                 '            ' +
-                '            <button onclick="window.opener.generatePDFReport(window.opener.JSON.parse(window.opener.localStorage.getItem(\'fajrus_db_v2\'))[' + index + '])" class="bg-emerald-600 text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-emerald-700 transition shadow">' +
-                '                Cetak PDF Card ✓' +
+                '            <button onclick="window.opener.generatePDFReport(window.opener.JSON.parse(window.opener.localStorage.getItem(\'fajrus_db_v2\'))[' + index + '])" class="bg-emerald-600 text-white font-bold text-[11px] md:text-xs px-3 py-2 rounded-lg hover:bg-emerald-700 transition shadow">' +
+                '                Cetak PDF ✓' +
                 '            </button>' +
                 '        </div>' +
                 '    </div>' +
                 '    ' +
-                '    <div class="max-w-3xl w-full mx-auto bg-white p-6 md:p-8 rounded-xl shadow-sm border px-4">' +
-                '        <div class="border-b-4 border-emerald-600 pb-4 mb-6 flex items-center space-x-4">' +
-                '             <img src="logo.png" alt="Logo" class="h-16 w-auto object-contain" onerror="this.src=\'https://via.placeholder.com/60x60?text=LOGO\'">' +
+                '    <div class="max-w-3xl w-full mx-auto bg-white p-4 md:p-8 rounded-xl shadow-sm border">' +
+                '        <div class="border-b-4 border-emerald-600 pb-3 mb-4 flex items-center space-x-3">' +
+                '             <img src="logo.png" alt="Logo" class="h-10 w-auto md:h-16 object-contain" onerror="this.src=\'https://via.placeholder.com/60x60?text=LOGO\'">' +
                 '             <div>' +
-                '                 <h2 class="text-xl font-extrabold text-gray-900 leading-tight">Review Berkas Kelengkapan Santri</h2>' +
-                '                 <p class="text-xs font-semibold text-emerald-700">Pondok Pesantren Fajrussalam Sentul City Bogor</p>' +
-                '                 <p class="text-[11px] text-gray-400 mt-0.5">No. Registrasi: ' + data.regNumber + ' | Terdaftar: ' + data.regDate + '</p>' +
+                '                 <h2 class="text-base md:text-xl font-extrabold text-gray-900 leading-tight">Review Berkas Kelengkapan Santri</h2>' +
+                '                 <p class="text-[10px] md:text-xs font-semibold text-emerald-700">Pondok Pesantren Fajrussalam Sentul City Bogor</p>' +
+                '                 <p class="text-[9px] md:text-[11px] text-gray-400 mt-0.5">No. Registrasi: ' + data.regNumber + ' | Terdaftar: ' + data.regDate + '</p>' +
                 '             </div>' +
                 '        </div>' +
                 '        ' +
-                '        <div class="space-y-4 text-sm mb-6">' +
-                '            <h3 class="font-bold text-emerald-700 border-b pb-1 uppercase text-xs tracking-wider">I. IDENTITAS SANTRI</h3>' +
+                '        <div class="space-y-3.5 text-xs md:text-sm mb-6">' +
+                '            <h3 class="font-bold text-emerald-700 border-b pb-1 uppercase text-[10px] md:text-xs tracking-wider">I. IDENTITAS SANTRI</h3>' +
                 '            <p><strong>Nama Lengkap:</strong> ' + data.name + ' (' + data.gender + ')</p>' +
                 '            <p><strong>Tempat, Tanggal Lahir:</strong> ' + data.pob + ', ' + data.dob + '</p>' +
                 '            <p><strong>Alamat Rumah:</strong> ' + data.address + '</p>' +
                 '            <p><strong>Kontak Handphone:</strong> ' + data.phone + '</p>' +
                 '            <p><strong>Asal Sekolah:</strong> ' + data.school + ' (' + data.level + ') — Alamat: ' + data.schoolAddr + '</p>' +
                 '            ' +
-                '            <h3 class="font-bold text-emerald-700 border-b pb-1 uppercase text-xs tracking-wider pt-2">II. DATA LENGKAP ORANG TUA</h3>' +
-                '            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl">' +
+                '            <h3 class="font-bold text-emerald-700 border-b pb-1 uppercase text-[10px] md:text-xs tracking-wider pt-2">II. DATA LENGKAP ORANG TUA</h3>' +
+                '            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-3 md:p-4 rounded-xl">' +
                 '                <div>' +
-                '                    <p class="font-bold text-xs text-gray-400 uppercase tracking-wider mb-2">AYAH KANDUNG:</p>' +
+                '                    <p class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-1.5">AYAH KANDUNG:</p>' +
                 '                    <p><strong>Nama:</strong> ' + data.fatherName + '</p>' +
                 '                    <p><strong>TTL:</strong> ' + data.fatherBirth + '</p>' +
                 '                    <p><strong>Pekerjaan:</strong> ' + data.fatherJob + '</p>' +
                 '                    <p><strong>HP:</strong> ' + data.fatherPhone + '</p>' +
-                '                    <p><strong>Alamat:</strong> ' + data.fatherAddress + '</p>' +
+                '                    <p class="break-words"><strong>Alamat:</strong> ' + data.fatherAddress + '</p>' +
                 '                </div>' +
                 '                <div>' +
-                '                    <p class="font-bold text-xs text-gray-400 uppercase tracking-wider mb-2">IBU KANDUNG:</p>' +
+                '                    <p class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-1.5">IBU KANDUNG:</p>' +
                 '                    <p><strong>Nama:</strong> ' + data.motherName + '</p>' +
                 '                    <p><strong>TTL:</strong> ' + data.motherBirth + '</p>' +
                 '                    <p><strong>Pekerjaan:</strong> ' + data.motherJob + '</p>' +
                 '                    <p><strong>HP:</strong> ' + data.motherPhone + '</p>' +
-                '                    <p><strong>Alamat:</strong> ' + data.motherAddress + '</p>' +
+                '                    <p class="break-words"><strong>Alamat:</strong> ' + data.motherAddress + '</p>' +
                 '                </div>' +
                 '            </div>' +
                 '        </div>' +
                 '        ' +
-                '        <div class="border-t pt-5">' +
-                '            <h3 class="text-xs font-bold text-gray-800 mb-4 uppercase tracking-wider">FILE LAMPIRAN DOKUMEN ASLI (LIVE PREVIEW):</h3>' +
-                '            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">' +
+                '        <div class="border-t pt-4">' +
+                '            <h3 class="text-[10px] md:text-xs font-bold text-gray-800 mb-3 uppercase tracking-wider">FILE LAMPIRAN DOKUMEN ASLI:</h3>' +
+                '            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">' +
                                  createPreviewCard("Pas Foto 3x3", data.docs.photo, "Foto_" + data.regNumber) +
                                  createPreviewCard("Kartu Keluarga (KK)", data.docs.kk, "KK_" + data.regNumber) +
                                  createPreviewCard("Akte Kelahiran", data.docs.akte, "Akte_" + data.regNumber) +
@@ -860,11 +884,10 @@
                 '        <button class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none" onclick="closeImageModal()">' +
                 '            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>' +
                 '        </button>' +
-                '        <div id="lightboxTitle" class="text-white text-sm font-bold tracking-wider mb-3 uppercase bg-black/40 px-3 py-1 rounded-full border border-gray-700"><\/div>' +
+                '        <div id="lightboxTitle" class="text-white text-xs font-bold tracking-wider mb-2 uppercase bg-black/40 px-3 py-1 rounded-full border border-gray-700"><\/div>' +
                 '        <div class="max-w-4xl max-h-[80vh] w-full flex justify-center items-center" onclick="event.stopPropagation()">' +
-                '            <img id="lightboxImage" src="" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl border-2 border-white/10" alt="Zoom Preview">' +
+                '            <img id="lightboxImage" src="" class="max-w-full max-h-[80vh] object-contain rounded-lg" alt="Zoom Preview">' +
                 '        </div>' +
-                '        <p class="text-gray-400 text-xs mt-4">Klik area mana saja di luar gambar untuk menutup pratinjau</p>' +
                 '    </div>' +
                 '' +
                 '    <script>' +
