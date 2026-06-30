@@ -4,34 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Penerimaan Santri Baru | PP Fajrussalam</title>
-    
-    <link rel="shortcut icon" type="image/png" href="logo.png?v=1">
-
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Tailwind CSS untuk Desain Responsif -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF untuk Auto-Generate PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .bg-fajrus { background-color: #065f46; }
         .bg-fajrus-dark { background-color: #044e39; }
         .text-fajrus { color: #065f46; }
         .border-fajrus { border-color: #065f46; }
         .hover-fajrus:hover { background-color: #047857; }
+
+        /* Gaya Bubble Gum Navigation Menu ala iOS iPhone */
+        .bubble-menu-btn {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bubble-menu-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 8px;
+            height: 8px;
+            background-color: #059669;
+            border-radius: 9999px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+        }
+        .bubble-menu-btn.active-bubble {
+            background-color: #ecfdf5;
+            color: #065f46;
+            transform: scale(1.05);
+            border-radius: 9999px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            box-shadow: 0 4px 12px rgba(6, 95, 70, 0.1);
+        }
+        .bubble-menu-btn.active-bubble::after {
+            transform: translateX(-50%) scaleX(1);
+            opacity: 1;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            background-color: #065f46;
+        }
+        .bubble-menu-btn:hover:not(.active-bubble) {
+            transform: translateY(-2px);
+            color: #047857;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
+    <!-- WRAPPER UNTUK KONTEN UTAMA AGAR FOOTER SELALU DI BAWAH -->
     <div class="flex-grow">
-        <header class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-emerald-600">
+        <!-- NAVBAR HEADER -->
+        <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
             <div class="container mx-auto px-4 py-3 flex justify-between items-center">
                 
+                <!-- SISI KIRI: LOGO & IDENTITAS -->
                 <div class="flex items-center space-x-3">
-                    <button onclick="toggleMenu()" class="p-2 rounded-md hover:bg-gray-100 text-fajrus focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                    
                     <img src="logo.png" alt="Logo" class="h-12 w-auto" onerror="this.src='https://via.placeholder.com/60x60?text=LOGO'">
                     <div>
                         <p class="text-[9px] md:text-xs font-bold text-emerald-700 tracking-wider uppercase leading-none">Tarbiyatul Mu'allimin Al-Islamiyyah (TMI)</p>
@@ -40,39 +78,70 @@
                     </div>
                 </div>
 
-                <div id="adminBadge" class="hidden bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-bold">
-                    Admin Mode Active
+                <!-- SISI TENGAH: BUBBLE GUM NAVIGATION MENU (DESKTOP) -->
+                <nav class="hidden md:flex items-center space-x-2 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/50">
+                    <button id="nav-landing" onclick="navigateTo('landing')" class="bubble-menu-btn active-bubble px-4 py-2 text-xs font-bold tracking-wide transition-all">BERANDA</button>
+                    <button id="nav-pendaftaran" onclick="navigateTo('pendaftaran')" class="bubble-menu-btn px-4 py-2 text-xs font-bold tracking-wide text-gray-600 transition-all">PENDAFTARAN</button>
+                    <button id="nav-admin-check" onclick="navigateTo('admin-check')" class="bubble-menu-btn px-4 py-2 text-xs font-bold tracking-wide text-gray-600 transition-all">ADMIN PANEL</button>
+                </nav>
+
+                <!-- SISI KANAN: TOMBOL MENU MOBILE & BADGE ADMIN -->
+                <div class="flex items-center space-x-2">
+                    <div id="adminBadge" class="hidden bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-full font-bold">
+                        Admin Mode
+                    </div>
+                    <button onclick="toggleMenu()" class="md:hidden p-2 rounded-xl hover:bg-gray-100 text-fajrus focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 
+            <!-- DROPDOWN MENU MOBILE -->
             <div id="hamburgerMenu" class="hidden bg-white border-t border-gray-100 shadow-lg absolute w-full left-0 z-40">
                 <div class="px-4 py-3 space-y-1">
                     <button onclick="navigateTo('landing')" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-emerald-50 hover:text-fajrus rounded-lg">BERANDA</button>
                     <button onclick="navigateTo('pendaftaran')" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-emerald-50 hover:text-fajrus rounded-lg">PENDAFTARAN</button>
-                    <button onclick="navigateTo('admin-check')" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-emerald-50 hover:text-fajrus rounded-lg border-t border-gray-100 mt-1">ADMIN PANEL</button>
+                    <button onclick="navigateTo('admin-check')" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-emerald-50 hover:text-fajrus rounded-lg">ADMIN PANEL</button>
                     <button id="btnMenuLogout" onclick="logoutAdmin()" class="hidden w-full text-left px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg">LOGOUT ADMIN</button>
                 </div>
             </div>
         </header>
 
+        <!-- ================= MODUL 1: LANDING BERANDA WITH GRADING BACKGROUND ================= -->
         <div id="view-landing" class="view-section">
-            <section class="bg-fajrus text-white py-20 px-4 text-center relative">
-                <div class="relative z-10 max-w-3xl mx-auto">
-                    <span class="bg-emerald-800 text-emerald-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Penerimaan Santri Baru (PSB)</span>
-                    <h2 class="text-xl md:text-2xl font-semibold mt-3 text-emerald-200">Satuan Pendidikan Mu'adalah</h2>
-                    <h1 class="text-4xl md:text-6xl font-extrabold mt-1 mb-6">Pondok Pesantren Fajrussalam</h1>
-                    <p class="text-sm md:text-base text-emerald-100 max-w-xl mx-auto font-light mb-8">
-                        Mewujudkan lembaga pendidikan Islam terdepan guna melahirkan kader ulama yang ikhlas, cerdas, berkepribadian mulia, dan mandiri.
+            <section class="relative min-h-[85vh] flex items-center justify-center px-4 text-center bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(6, 95, 70, 0.85), rgba(4, 30, 24, 0.95)), url('WhatsApp Image 2026-06-30 at 07.45.42.jpg');">
+                <div class="relative z-10 max-w-4xl mx-auto py-12">
+                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-sm">
+                        Penerimaan Santri Baru (PSB) 2026
+                    </span>
+                    <h2 class="text-amber-400 text-sm md:text-xl font-bold mt-6 tracking-widest uppercase">
+                        ASSALAMUALAIKUM AHLAN WASAHLAN CALON SANTRI BARU
+                    </h2>
+                    <h1 class="text-3xl md:text-6xl font-black text-white mt-2 mb-6 tracking-tight leading-tight uppercase">
+                        Pondok Pesantren <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-amber-300">Fajrussalam Bogor</span>
+                    </h1>
+                    <p class="text-sm md:text-lg text-emerald-100 max-w-2xl mx-auto font-light mb-10 leading-relaxed">
+                        Mewujudkan lembaga pendidikan Islam terdepan guna melahirkan kader ulama yang ikhlas, cerdas, berkepribadian mulia, mandiri, dan berwawasan luas.
                     </p>
-                    <button onclick="navigateTo('pendaftaran')" class="bg-white text-fajrus font-bold px-8 py-3.5 rounded-lg shadow-lg hover:bg-emerald-50 transition text-sm md:text-base">
-                        Mulai Pendaftaran Online
-                    </button>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <button onclick="navigateTo('pendaftaran')" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-gray-900 font-extrabold px-8 py-4 rounded-xl shadow-xl transition-all duration-300 hover:scale-105 transform text-sm md:text-base">
+                            Isi Formulir Pendaftaran
+                        </button>
+                        <button onclick="navigateTo('admin-check')" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-xl border border-white/20 backdrop-blur-sm transition text-sm md:text-base">
+                            Sistem Kelola Admin
+                        </button>
+                    </div>
                 </div>
+                <!-- Efek Fade Transparan Dekoratif Di Bawah Hero -->
+                <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent"></div>
             </section>
         </div>
 
+        <!-- ================= MODUL 2: FORMULIR & REVIEW PENDAFTARAN ================= -->
         <div id="view-pendaftaran" class="view-section hidden container mx-auto px-4 py-12 max-w-4xl">
-            
+            <!-- STEP 1: ISI DATA FORMULIR -->
             <div id="box-form-isi" class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100">
                     <h3 class="text-lg md:text-xl font-bold text-fajrus">Formulir Pendaftaran Calon Santri</h3>
@@ -80,6 +149,7 @@
                 </div>
                 
                 <form id="mainForm" class="p-6 md:p-8 space-y-8" onsubmit="processToReview(event)">
+                    <!-- I. Data Santri -->
                     <div>
                         <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>I. Informasi Calon Santri</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -122,6 +192,7 @@
                         </div>
                     </div>
 
+                    <!-- II. Informasi Orang Tua -->
                     <div>
                         <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>II. Informasi Orang Tua Kandung</h4>
                         <div class="space-y-6">
@@ -174,6 +245,7 @@
                         </div>
                     </div>
 
+                    <!-- III. Informasi Pendidikan -->
                     <div>
                         <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>III. Informasi Pendidikan Asal</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -196,6 +268,7 @@
                         </div>
                     </div>
 
+                    <!-- IV. Dokumen Lampiran -->
                     <div>
                         <h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-4 flex items-center"><span class="w-2 h-4 bg-fajrus inline-block mr-2 rounded-sm"></span>IV. Dokumen Lampiran (Maks 2MB)</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -224,6 +297,7 @@
                 </form>
             </div>
 
+            <!-- STEP 2: HALAMAN REVIEW -->
             <div id="box-form-review" class="bg-white rounded-2xl shadow-xl border-2 border-amber-500 overflow-hidden hidden">
                 <div class="bg-amber-50 px-6 py-4 border-b border-amber-200">
                     <h3 class="text-lg font-bold text-amber-800 flex items-center">
@@ -268,6 +342,7 @@
             </div>
         </div>
 
+        <!-- ================= MODUL 3: HALAMAN HASIL AKHIR ================= -->
         <div id="view-success" class="view-section hidden container mx-auto px-4 py-16 max-w-xl">
             <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 text-center">
                 <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -295,6 +370,7 @@
             </div>
         </div>
 
+        <!-- ================= MODUL 4: LOGIN GATEWAY ADMIN ================= -->
         <div id="view-admin-check" class="view-section hidden container mx-auto px-4 py-20 max-w-sm">
             <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
                 <div class="text-center mb-6">
@@ -318,6 +394,7 @@
             </div>
         </div>
 
+        <!-- ================= MODUL 5: DASHBOARD CONTROL ADMIN ================= -->
         <div id="view-admin-dashboard" class="view-section hidden container mx-auto px-4 py-10 max-w-6xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4">
                 <div class="flex items-center space-x-4">
@@ -359,6 +436,7 @@
         </div>
     </div>
 
+    <!-- ELEMEN FOOTER UTAMA -->
     <footer id="mainAppFooter" class="bg-fajrus-dark text-white pt-12 pb-6 px-4 mt-auto border-t-4 border-amber-500 hidden">
         <div class="max-w-4xl mx-auto text-center">
             <div class="flex items-center justify-center space-x-4 md:space-x-8 mb-4">
@@ -381,6 +459,7 @@
         </div>
     </footer>
 
+    <!-- ================= PROGRAM LOGIC ENGINE JAVASCRIPT ================= -->
     <script>
         let activeRegistration = null; 
         let globalDatabase = JSON.parse(localStorage.getItem('fajrus_db_v2') || '[]');
@@ -403,6 +482,17 @@
             const targetView = document.getElementById(`view-${viewId}`);
             if(targetView) {
                 targetView.classList.remove('hidden');
+            }
+
+            // Atur Efek Bubble Menu Aktif (Desktop Only)
+            document.querySelectorAll('.bubble-menu-btn').forEach(btn => {
+                btn.classList.remove('active-bubble');
+                btn.classList.add('text-gray-600');
+            });
+            const activeBtn = document.getElementById(`nav-${viewId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('active-bubble');
+                activeBtn.classList.remove('text-gray-600');
             }
 
             const footer = document.getElementById('mainAppFooter');
@@ -513,32 +603,26 @@
             navigateTo('success');
         }
 
-        // PENYEMPURNAAN MODUL GENERATE PDF: Sekarang Mendukung Gambar Logo Otomatis
         function generatePDFReport(dataset) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
 
-            // 1. Gambar Background Dekoratif Atas
             doc.setFillColor(6, 95, 70); 
             doc.rect(0, 0, 210, 8, 'F');
             
-            // 2. Load File 'logo.png' Secara Dinamis Kedalam Kop Surat PDF
             const imgLogo = new Image();
             imgLogo.src = 'logo.png';
             
             imgLogo.onload = function() {
-                // Jika Berhasil Load, Masukkan Logo Ke Sisi Kiri Atas Kop PDF (Ukuran 16mm x 16mm)
                 doc.addImage(imgLogo, 'PNG', 20, 14, 16, 16);
                 buildPdfContent();
             };
             
             imgLogo.onerror = function() {
-                // Jika Gagal/Logo Hilang, Sistem Otomatis Lewati Gambar Agar Aplikasi Tidak Crash
                 buildPdfContent();
             };
 
             function buildPdfContent() {
-                // Teks Kop Surat Disisipkan Agak Geser Ke Kanan (X: 40) Memberikan Ruang Untuk Logo
                 doc.setFont("Helvetica", "bold");
                 doc.setFontSize(10);
                 doc.text("TARBIYATUL MU'ALLIMIN AL-ISLAMIYYAH (TMI)", 40, 18);
@@ -672,7 +756,6 @@
             });
         }
 
-        // PREVIEW POP-UP WINDOWS DI-UPGRADE DENGAN KOP RESMI + LOGO PONDOK
         function adminReviewData(index) {
             const records = JSON.parse(localStorage.getItem('fajrus_db_v2') || '[]');
             const data = records[index];
@@ -747,7 +830,6 @@
                 '    </div>' +
                 '    ' +
                 '    <div class="max-w-3xl w-full mx-auto bg-white p-6 md:p-8 rounded-xl shadow-sm border px-4">' +
-                '        ' +
                 '        <div class="border-b-4 border-emerald-600 pb-4 mb-6 flex items-center space-x-4">' +
                 '             <img src="logo.png" alt="Logo" class="h-16 w-auto object-contain" onerror="this.src=\'https://via.placeholder.com/60x60?text=LOGO\'">' +
                 '             <div>' +
