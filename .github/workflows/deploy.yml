@@ -17,5 +17,11 @@ jobs:
           password: '4We7p#2f0aF%8H' 
           script: |
             cd ~/Praktikum-devops-tazkia
-            git pull origin main
+
+            # Paksa hapus perubahan lokal VPS dan tarik commit terbaru dari GitHub
+            git fetch --all
+            git reset --hard origin/main
+
+            # Bongkar kontainer lama dan bangun ulang secara bersih tanpa cache
+            docker compose down
             docker compose up -d --build
